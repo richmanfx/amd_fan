@@ -48,7 +48,7 @@ def get_fan_speed(gpu_number):
     Return fan speed of a given GPU
         :param gpu_number: GPU number
         :return: Fan speed
-        """
+    """
     command = 'ethos-smi -g {0} | grep "* Fan Speed" | cut -f 5 -d " "'.format(gpu_number)
     fan_speed = subprocess.check_output(command, shell=True).decode('utf-8')
     return int(fan_speed[:-2])
@@ -68,6 +68,10 @@ def fan_speed_set(gpu_number, new_fan_speed):
 
 
 def set_logging_level():
+    """
+    Set and return logger with debug level from config file
+        :return: Logger
+    """
     log = logging.getLogger('main')
 
     if amd_fan_config.DEBUG_LEVEL == 'DEBUG':
@@ -84,40 +88,58 @@ def set_logging_level():
     return log
 
 
+def get_gpu_number(log):
+    """
+    Returns the number of GPU
+        :return: GPU number
+    """
+    command = 'ethos-smi | grep "\[" | grep "\]" | grep GPU | tail -1 | cut -f 1 -d " "'
+    gpu_count = subprocess.check_output(command, shell=True).decode('utf-8')[3:]
+    number = int(gpu_count) + 1     # Count from 0
+    log.debug('gpu_count: {0}'.format(number))
+    return int(number)
+
+
 def main():
     """
     Main function
     """
 
+    # Clean the console
     clear_console()
 
+    # Logger
     log = set_logging_level()
 
-    gpu_number = 4
-    new_temp = get_temp(gpu_number)
-    current_fan_speed = get_fan_speed(gpu_number)
+    # GPU number
+    gpu_number = get_gpu_number(log)
+
     while True:
 
-        current_temp = get_temp(gpu_number)
-        log.debug('============================================================')
-        log.debug('GPU {0}: Temp: {1}°C, Fan speed: {2}%'.format(gpu_number, current_temp, current_fan_speed))
+        for gpu in range(gpu_number):
 
-        if not valid_range(amd_fan_config.LOW_TEMP, amd_fan_config.HIGH_TEMP, current_temp):
-            log.debug('GPU {0}: Out of temperature range {1}...{2} °C'
-                      .format(gpu_number, amd_fan_config.LOW_TEMP, amd_fan_config.HIGH_TEMP))
+            new_temp = get_temp(gpu)
+            current_fan_speed = get_fan_speed(gpu)
+            log.debug('-====================== GPU {0} ===========================-'.format(gpu))
+            current_temp = get_temp(gpu)
+            log.debug('GPU {0}: Temp: {1}°C, Fan speed: {2}%'.format(gpu, current_temp, current_fan_speed))
 
-            # Increase the speed
-            if current_temp > amd_fan_config.HIGH_TEMP:
-                new_temp = current_fan_speed + amd_fan_config.SPEED_STEP
+            if not valid_range(amd_fan_config.LOW_TEMP, amd_fan_config.HIGH_TEMP, current_temp):
+                log.debug('GPU {0}: Out of temperature range {1}...{2} °C'
+                          .format(gpu, amd_fan_config.LOW_TEMP, amd_fan_config.HIGH_TEMP))
 
-            # Decrease the speed
-            if current_temp < amd_fan_config.LOW_TEMP:
-                new_temp = current_fan_speed - amd_fan_config.SPEED_STEP
+                # Increase the speed
+                if current_temp > amd_fan_config.HIGH_TEMP:
+                    new_temp = current_fan_speed + amd_fan_config.SPEED_STEP
 
-            fan_speed_set(gpu_number, new_temp)
-            log.debug("GPU {0}: Fan speed set to: {1}%".format(gpu_number, new_temp))
+                # Decrease the speed
+                if current_temp < amd_fan_config.LOW_TEMP:
+                    new_temp = current_fan_speed - amd_fan_config.SPEED_STEP
 
-        time.sleep(amd_fan_config.SLEEP_TIME)
+                fan_speed_set(gpu, new_temp)
+                log.debug("GPU {0}: Fan speed set to: {1}%".format(gpu, new_temp))
+
+            time.sleep(amd_fan_config.SLEEP_TIME / (gpu_number + 1))
 
 
 if __name__ == '__main__':
