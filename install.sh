@@ -3,7 +3,8 @@
 config_file="amd_fan_config.py"
 app_dir="amd_fan"
 app_name="amd_fan.py"
-
+run_app_script="run_amd_fan.sh"
+stop_app_script="stop_amd_fan.sh"
 
 # Create directory for application
 if ! [ -d "$HOME/bin/$app_dir" ]
@@ -20,12 +21,12 @@ if [ -f "$HOME/bin/$app_dir/$app_name" ]
 then
     echo "Application file '$HOME/bin/$app_dir/$app_name' already exists. Backup it."
     mv $HOME/bin/${app_dir}/${app_name} $HOME/bin/${app_dir}/${app_name}.backup
-    echo "Copying application file '$app_name' to '$HOME/bin/$app_dir/' directory"
-    /bin/cp ./${app_name} $HOME/bin/${app_dir}/${app_name}
-else
-    echo "Copying application file '$app_name' to '$HOME/bin/$app_dir/' directory"
-    /bin/cp ./${app_name} $HOME/bin/${app_dir}/${app_name}
 fi
+echo "Copying application files to '$HOME/bin/$app_dir/' directory"
+/bin/cp ./__init__.py $HOME/bin/${app_dir}/__init__.py
+/bin/cp ./${app_name} $HOME/bin/${app_dir}/${app_name}
+/bin/cp ./${run_app_script} $HOME/bin/${app_dir}/${run_app_script}
+/bin/cp ./${stop_app_script} $HOME/bin/${app_dir}/${stop_app_script}
 
 
 # To place a configuration file
@@ -39,7 +40,8 @@ fi
 
 
 # Make link to application file
-/bin/ln -fsv $HOME/bin/$app_dir/$app_name /opt/ethos/bin/$app_name
+/bin/ln -fsv $HOME/bin/$app_dir/$run_app_script /opt/ethos/bin/$run_app_script
+/bin/ln -fsv $HOME/bin/$app_dir/$stop_app_script /opt/ethos/bin/$stop_app_script
 
 
 # Make the auto run

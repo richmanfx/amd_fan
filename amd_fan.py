@@ -130,11 +130,13 @@ def main():
 
                 # Increase the speed
                 if current_temp > amd_fan_config.HIGH_TEMP:
-                    new_temp = current_fan_speed + amd_fan_config.SPEED_STEP
+                    if current_fan_speed < 100:
+                        new_temp = current_fan_speed + amd_fan_config.SPEED_STEP
 
                 # Decrease the speed
                 if current_temp < amd_fan_config.LOW_TEMP:
-                    new_temp = current_fan_speed - amd_fan_config.SPEED_STEP
+                    if current_fan_speed > 0:
+                        new_temp = current_fan_speed - amd_fan_config.SPEED_STEP
 
                 fan_speed_set(gpu, new_temp)
                 log.debug("GPU {0}: Fan speed set to: {1}%".format(gpu, new_temp))

@@ -1,7 +1,13 @@
 #!/bin/sh
 
+app_dir="amd_fan"
+app_name="amd_fan.py"
+
+
 # Stop
-/usr/bin/killall amd_fan.py
+/usr/bin/killall ${app_name}
 
 # Start
-/usr/bin/nohup amd_fan.py &
+cd $HOME/bin/${app_dir}
+/bin/rm -f ./nohup.out
+nohup ./${app_name} &

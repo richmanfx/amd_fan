@@ -14,4 +14,4 @@ SLEEP_TIME = 300
 SPEED_STEP = 5
 
 # Debug level ('DEBUG' - debugging messages, '' - silence)
-DEBUG_LEVEL = 'DEBUG'
+DEBUG_LEVEL = ''

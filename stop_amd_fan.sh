@@ -1,3 +1,5 @@
 #!/bin/sh
 
-/usr/bin/killall amd_fan.py
+app_name="amd_fan.py"
+
+/usr/bin/killall ${app_name}

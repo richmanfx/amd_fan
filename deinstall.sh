@@ -2,11 +2,15 @@
 
 app_dir="amd_fan"
 app_name="amd_fan.py"
+run_app_script="run_amd_fan.sh"
+stop_app_script="stop_amd_fan.sh"
 
 
 # Delete link to application file
-echo "Delete link to application file: '/opt/ethos/bin/$app_name'"
-/bin/rm /opt/ethos/bin/${app_name}
+echo "Delete links to application files"
+/bin/rm /opt/ethos/bin/${run_app_script}
+/bin/rm /opt/ethos/bin/${stop_app_script}
+
 
 # Delete application
 echo "Delete application in: '$HOME/bin/$app_dir'"
