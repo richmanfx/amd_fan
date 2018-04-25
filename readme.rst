@@ -28,7 +28,7 @@ Russian_ / English_
 
     git clone https://github.com/richmanfx/amd_fan.git
 
-Загрузится директория **amd_fan**, содержащая приложени.
+Загрузится директория **amd_fan**, содержащая приложение.
 
 
 Инсталляция
@@ -52,6 +52,7 @@ Russian_ / English_
 
 Лицензия
 --------
+
 
 
 Рапорты по ошибкам
