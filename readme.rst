@@ -59,12 +59,17 @@ Russian_ / English_
 Рапорты по ошибкам
 ------------------
 Сообщения по ошибкам отправляйте электронной почтой на
-E-mail: r5am@mail.ru .
+E-mail: richmanfx@yandex.ru .
+
+
+Для пожертвований
+-------------
+**ETH**: 0xfe0db8424cd6d28fbcbd473b0db91dfeda14129d
 
 
 Контакты
 --------
-E-mail: r5am@mail.ru
+E-mail: richmanfx@yandex.ru
 
 
 ----------
