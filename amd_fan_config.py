@@ -7,8 +7,8 @@ HIGH_TEMP = 60
 # Low temperature, °C (default value - 55)
 LOW_TEMP = 55
 
-# Timeout between fan speed sets, sec (default value - 120)
-SLEEP_TIME = 120
+# Timeout between fan speed sets, sec (default value - 60)
+SLEEP_TIME = 60
 
 # Speed step, % (default value - 5)
 SPEED_STEP = 5
