@@ -120,7 +120,7 @@ def set_new_fan_speed_for_all(gpu_count, log):
 
         current_temp = get_temp(gpu)
         current_fan_speed = get_fan_speed(gpu)
-        log.debug('-====================== GPU {0} ===========================-'.format(gpu))
+        log.debug('-========================= GPU {0} ==========================-'.format(gpu))
         log.debug('GPU {0}: Temp: {1}°C, Fan speed: {2}%'.format(gpu, current_temp, current_fan_speed))
 
         if not valid_range(amd_fan_config.LOW_TEMP, amd_fan_config.HIGH_TEMP, current_temp):
@@ -138,7 +138,7 @@ def set_new_fan_speed_for_all(gpu_count, log):
                     new_fan_speed = current_fan_speed - amd_fan_config.SPEED_STEP
 
             fan_speed_set(gpu, new_fan_speed)
-            log.debug("GPU {0}: Fan speed set to: {1}%".format(gpu, new_fan_speed))
+            # log.debug("GPU {0}: Fan speed set to: {1}%".format(gpu, new_fan_speed))
 
 
 def main():
@@ -161,7 +161,8 @@ def main():
     while True:
         set_new_fan_speed_for_all(gpu_number, log)
         time.sleep(amd_fan_config.SLEEP_TIME)
-        log.debug("-==========================================================-")
+        log.debug("\n\n-======================================================="
+                  "===========================================================-")
         log.debug("A new cycle of change of fan speed. Cycle time: {0} seconds.".format(amd_fan_config.SLEEP_TIME))
 
 
