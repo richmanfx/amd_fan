@@ -8,7 +8,7 @@ import subprocess
 
 import amd_fan_config
 
-VERSION = '1.1.0'
+VERSION = '1.2.0'
 __author__ = 'Aleksandr Jashhuk, Zoer, R5AM, www.r5am.ru'
 
 
@@ -109,6 +109,38 @@ def set_initial_fan_speed(gpu_count):
         fan_speed_set(gpu, amd_fan_config.INIT_FAN_SPEED)
 
 
+def set_new_fan_speed_for_all(gpu_count, log):
+    """
+    Sets the fan speed for all graphics cards
+        :param gpu_count: Number of video cards in the system
+        :param log: Logger
+    """
+    new_fan_speed = amd_fan_config.INIT_FAN_SPEED
+    for gpu in range(gpu_count):
+
+        current_temp = get_temp(gpu)
+        current_fan_speed = get_fan_speed(gpu)
+        log.debug('-====================== GPU {0} ===========================-'.format(gpu))
+        log.debug('GPU {0}: Temp: {1}°C, Fan speed: {2}%'.format(gpu, current_temp, current_fan_speed))
+
+        if not valid_range(amd_fan_config.LOW_TEMP, amd_fan_config.HIGH_TEMP, current_temp):
+            log.debug('GPU {0}: Out of temperature range {1}...{2} °C'
+                      .format(gpu, amd_fan_config.LOW_TEMP, amd_fan_config.HIGH_TEMP))
+
+            # Increase the speed
+            if current_temp > amd_fan_config.HIGH_TEMP:
+                if current_fan_speed < 100:
+                    new_fan_speed = current_fan_speed + amd_fan_config.SPEED_STEP
+
+            # Decrease the speed
+            if current_temp < amd_fan_config.LOW_TEMP:
+                if current_fan_speed > 0:
+                    new_fan_speed = current_fan_speed - amd_fan_config.SPEED_STEP
+
+            fan_speed_set(gpu, new_fan_speed)
+            log.debug("GPU {0}: Fan speed set to: {1}%".format(gpu, new_fan_speed))
+
+
 def main():
     """
     Main function
@@ -127,33 +159,8 @@ def main():
     set_initial_fan_speed(gpu_number)
 
     while True:
-
-        for gpu in range(gpu_number):
-
-            new_temp = get_temp(gpu)
-            current_fan_speed = get_fan_speed(gpu)
-            log.debug('-====================== GPU {0} ===========================-'.format(gpu))
-            current_temp = get_temp(gpu)
-            log.debug('GPU {0}: Temp: {1}°C, Fan speed: {2}%'.format(gpu, current_temp, current_fan_speed))
-
-            if not valid_range(amd_fan_config.LOW_TEMP, amd_fan_config.HIGH_TEMP, current_temp):
-                log.debug('GPU {0}: Out of temperature range {1}...{2} °C'
-                          .format(gpu, amd_fan_config.LOW_TEMP, amd_fan_config.HIGH_TEMP))
-
-                # Increase the speed
-                if current_temp > amd_fan_config.HIGH_TEMP:
-                    if current_fan_speed < 100:
-                        new_temp = current_fan_speed + amd_fan_config.SPEED_STEP
-
-                # Decrease the speed
-                if current_temp < amd_fan_config.LOW_TEMP:
-                    if current_fan_speed > 0:
-                        new_temp = current_fan_speed - amd_fan_config.SPEED_STEP
-
-                fan_speed_set(gpu, new_temp)
-                log.debug("GPU {0}: Fan speed set to: {1}%".format(gpu, new_temp))
-
-            time.sleep(amd_fan_config.SLEEP_TIME / (gpu_number + 1))
+        set_new_fan_speed_for_all(gpu_number, log)
+        time.sleep(amd_fan_config.SLEEP_TIME)
 
 
 if __name__ == '__main__':
