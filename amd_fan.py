@@ -161,6 +161,8 @@ def main():
     while True:
         set_new_fan_speed_for_all(gpu_number, log)
         time.sleep(amd_fan_config.SLEEP_TIME)
+        log.debug("-==========================================================-")
+        log.debug("A new cycle of change of fan speed. Cycle time: {0} seconds.".format(amd_fan_config.SLEEP_TIME))
 
 
 if __name__ == '__main__':
