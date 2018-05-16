@@ -8,7 +8,7 @@ import subprocess
 
 import amd_fan_config
 
-VERSION = '1.0.0'
+VERSION = '1.1.0'
 __author__ = 'Aleksandr Jashhuk, Zoer, R5AM, www.r5am.ru'
 
 
@@ -100,6 +100,15 @@ def get_gpu_number(log):
     return int(number)
 
 
+def set_initial_fan_speed(gpu_count):
+    """
+    Sets the initial fan speed when the program starts
+        :param gpu_count: Number of video cards in the system
+    """
+    for gpu in range(gpu_count):
+        fan_speed_set(gpu, amd_fan_config.INIT_FAN_SPEED)
+
+
 def main():
     """
     Main function
@@ -113,6 +122,9 @@ def main():
 
     # GPU number
     gpu_number = get_gpu_number(log)
+
+    # Set initial fan speed
+    set_initial_fan_speed(gpu_number)
 
     while True:
 

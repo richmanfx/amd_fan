@@ -13,5 +13,8 @@ SLEEP_TIME = 300
 # Speed step, % (default value - 5)
 SPEED_STEP = 5
 
+# Initial fan speed when the program starts, % (default value - 80)
+INIT_FAN_SPEED = 80
+
 # Debug level ('DEBUG' - debugging messages, '' - silence)
 DEBUG_LEVEL = ''

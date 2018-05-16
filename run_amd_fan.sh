@@ -10,4 +10,4 @@ app_name="amd_fan.py"
 # Start
 cd $HOME/bin/${app_dir}
 /bin/rm -f ./nohup.out
-nohup ./${app_name} &
+./${app_name} &
