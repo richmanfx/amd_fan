@@ -1,0 +1,14 @@
+[Unit]
+Description=Automatic AMD graphics card fan speed controller
+Wants=network.target
+
+[Service]
+User=ethos
+Group=ethos
+ExecStart=/home/ethos/bin/run_amd_fan.sh
+ExecStop=/home/ethos/bin/stop_amd_fan.sh
+ExecReload=/home/ethos/bin/run_amd_fan.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
