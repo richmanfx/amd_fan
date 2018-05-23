@@ -137,8 +137,9 @@ def set_new_fan_speed_for_all(gpu_count, log):
                 if current_fan_speed > 0:
                     new_fan_speed = current_fan_speed - amd_fan_config.SPEED_STEP
 
-            fan_speed_set(gpu, new_fan_speed)
-            # log.debug("GPU {0}: Fan speed set to: {1}%".format(gpu, new_fan_speed))
+            if new_fan_speed != current_fan_speed:
+                fan_speed_set(gpu, new_fan_speed)
+                # log.debug("GPU {0}: Fan speed set to: {1}%".format(gpu, new_fan_speed))
 
 
 def main():
